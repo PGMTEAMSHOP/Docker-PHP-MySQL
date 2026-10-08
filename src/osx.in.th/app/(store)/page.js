@@ -29,7 +29,7 @@ if (typeof window !== 'undefined') {
 }
 
 export default function Home() {
-  const { categories, scripts, stats } = useAuth();
+  const { categories, scripts, stats, statsLoaded } = useAuth();
   const { lang, t, getCategoryName } = useLanguage();
 
   // Filter root categories
@@ -43,6 +43,24 @@ export default function Home() {
 
   // Main container ref for GSAP context
   const mainRef = useRef(null);
+  const statsReadyRef = useRef(false);
+  const displayedStatsRef = useRef([0, 0, 0, 0]);
+  const entrancePlayedRef = useRef(false);
+
+  const statValues = [
+    stats?.total_users ?? 0,
+    scripts?.length ?? 0,
+    totalStock,
+    stats?.total_sold ?? 0,
+  ].map((value) => (Number.isFinite(Number(value)) ? Math.max(0, Math.round(Number(value))) : 0));
+
+  const [userCount, productCount, stockCount, soldCount] = statValues;
+  const statValuesRef = useRef([0, 0, 0, 0]);
+
+  useEffect(() => {
+    statsReadyRef.current = statsLoaded;
+    statValuesRef.current = statValues;
+  }, [statsLoaded, userCount, productCount, stockCount, soldCount]);
 
   // GSAP Animations — replaces the old IntersectionObserver
   useEffect(() => {
@@ -65,11 +83,54 @@ export default function Home() {
         '-=0.7'
       );
 
-      heroTl.fromTo('.stat-card',
-        { x: 40, opacity: 0, scale: 0.9 },
-        { x: 0, opacity: 1, scale: 1, duration: 0.55, stagger: 0.1, ease: 'back.out(1.4)' },
-        '-=0.6'
-      );
+      const statCards = gsap.utils.toArray('.stat-card');
+      const statCounters = statCards.map((card) => card.querySelector('[data-stat-counter]'));
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reducedMotion) {
+        gsap.set(statCards, { x: 0, opacity: 1, scale: 1 });
+        statCounters.forEach((element, index) => {
+          if (element) element.textContent = statValuesRef.current[index].toLocaleString('en-US');
+        });
+        displayedStatsRef.current = [...statValuesRef.current];
+        entrancePlayedRef.current = true;
+      } else {
+        // If stats are already available, add the coordinated entrance to the hero timeline.
+        // When async data has not settled yet, render the cards first and animate only the values later.
+        if (statsReadyRef.current && !entrancePlayedRef.current) {
+          // Start stat cards with the hero instead of waiting for the banner/glow animations to finish.
+          const statsStartAt = 0;
+          statCards.forEach((card, index) => {
+            const counter = { value: 0 };
+            const target = statValuesRef.current[index] ?? 0;
+            const startAt = statsStartAt + index * 0.2;
+
+            heroTl.fromTo(card,
+              { x: 40, opacity: 0, scale: 0.9 },
+              { x: 0, opacity: 1, scale: 1, duration: 0.3, ease: 'power3.out' },
+              startAt
+            );
+            heroTl.to(counter, {
+              value: target,
+              duration: 0.7,
+              ease: 'power2.out',
+              onUpdate: () => {
+                displayedStatsRef.current[index] = counter.value;
+                if (statCounters[index]) {
+                  statCounters[index].textContent = Math.round(counter.value).toLocaleString('en-US');
+                }
+              },
+              onComplete: () => {
+                displayedStatsRef.current[index] = target;
+                if (statCounters[index]) statCounters[index].textContent = target.toLocaleString('en-US');
+              },
+            }, startAt);
+          });
+          entrancePlayedRef.current = true;
+        } else if (!entrancePlayedRef.current) {
+          gsap.set(statCards, { x: 0, opacity: 1, scale: 1 });
+        }
+      }
 
       // ── Scroll-triggered sections ──
       gsap.utils.toArray('.gsap-section').forEach((section) => {
@@ -100,8 +161,8 @@ export default function Home() {
             y: 0,
             opacity: 1,
             scale: 1,
-            duration: 0.55,
-            stagger: 0.1,
+            duration: grid.classList.contains('why-feature-grid') ? 0.3 : 0.55,
+            stagger: grid.classList.contains('why-feature-grid') ? 0.2 : 0.1,
             ease: 'power3.out',
             scrollTrigger: {
               trigger: grid,
@@ -154,7 +215,40 @@ export default function Home() {
     }, mainRef);
 
     return () => ctx.revert();
-  }, [categories, scripts]);
+  }, [categories, scripts, statsLoaded, userCount, productCount, stockCount, soldCount]);
+
+  // Subsequent stat updates animate from the currently displayed number without replaying card entrance.
+  useEffect(() => {
+    if (!statsLoaded || !entrancePlayedRef.current) return;
+    const elements = mainRef.current?.querySelectorAll('[data-stat-counter]');
+    if (!elements?.length) return;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    statValues.forEach((target, index) => {
+      const element = elements[index];
+      if (!element) return;
+      if (reducedMotion) {
+        displayedStatsRef.current[index] = target;
+        element.textContent = target.toLocaleString('en-US');
+        return;
+      }
+
+      const counter = { value: displayedStatsRef.current[index] ?? 0 };
+      gsap.to(counter, {
+        value: target,
+        duration: 0.7,
+        ease: 'power2.out',
+        onUpdate: () => {
+          displayedStatsRef.current[index] = counter.value;
+          element.textContent = Math.round(counter.value).toLocaleString('en-US');
+        },
+        onComplete: () => {
+          displayedStatsRef.current[index] = target;
+          element.textContent = target.toLocaleString('en-US');
+        },
+      });
+    });
+  }, [statsLoaded, userCount, productCount, stockCount, soldCount]);
 
   return (
     <div ref={mainRef} className="flex flex-col gap-6 sm:gap-8 w-full max-w-[1360px] mx-auto pb-10">
@@ -195,7 +289,7 @@ export default function Home() {
               <span>{lang === 'th' ? 'ผู้ใช้งาน' : 'Users'}</span>
             </div>
             <div className="mt-1.5 sm:mt-2 text-base sm:text-xl font-extrabold text-white flex items-baseline gap-1">
-              <span>{(stats?.total_users || 5458).toLocaleString()}</span>
+              <span data-stat-counter>0</span>
               <small className="text-[10px] sm:text-xs text-[#64748b] font-normal">{lang === 'th' ? 'คน' : 'users'}</small>
             </div>
             <div className="stat-wm">
@@ -212,7 +306,7 @@ export default function Home() {
               <span>{lang === 'th' ? 'สินค้า' : 'Products'}</span>
             </div>
             <div className="mt-1.5 sm:mt-2 text-base sm:text-xl font-extrabold text-white flex items-baseline gap-1">
-              <span>{(scripts?.length || 0).toLocaleString()}</span>
+              <span data-stat-counter>0</span>
               <small className="text-[10px] sm:text-xs text-[#64748b] font-normal">{lang === 'th' ? 'รายการ' : 'items'}</small>
             </div>
             <div className="stat-wm">
@@ -229,7 +323,7 @@ export default function Home() {
               <span>{lang === 'th' ? 'คลังสินค้า' : 'In Stock'}</span>
             </div>
             <div className="mt-1.5 sm:mt-2 text-base sm:text-xl font-extrabold text-white flex items-baseline gap-1">
-              <span>{totalStock.toLocaleString()}</span>
+              <span data-stat-counter>0</span>
               <small className="text-[10px] sm:text-xs text-[#64748b] font-normal">{lang === 'th' ? 'ชิ้น' : 'pcs'}</small>
             </div>
             <div className="stat-wm">
@@ -246,7 +340,7 @@ export default function Home() {
               <span>{lang === 'th' ? 'ขายแล้ว' : 'Total Sold'}</span>
             </div>
             <div className="mt-1.5 sm:mt-2 text-base sm:text-xl font-extrabold text-white flex items-baseline gap-1">
-              <span>{(stats?.total_sold || 0).toLocaleString()}</span>
+              <span data-stat-counter>0</span>
               <small className="text-[10px] sm:text-xs text-[#64748b] font-normal">{lang === 'th' ? 'ชิ้น' : 'sold'}</small>
             </div>
             <div className="stat-wm">
@@ -395,7 +489,7 @@ export default function Home() {
           <div className="sec-line" />
         </div>
 
-        <div className="gsap-stagger-grid mt-2 grid auto-rows-fr grid-cols-1 gap-3 sm:mt-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+        <div className="gsap-stagger-grid why-feature-grid mt-2 grid auto-rows-fr grid-cols-1 gap-3 sm:mt-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           <article className="group why-feature-card flex h-full flex-col rounded-2xl border border-white/10 bg-gradient-to-br from-[#0c1722] to-[#08111a] p-4 transition duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_12px_32px_rgba(2,132,199,0.12)] sm:p-5">
             <div className="why-feature-icon relative isolate mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-sky-400/20 bg-gradient-to-br from-sky-500 to-sky-700 text-white shadow-[0_4px_14px_rgba(2,132,199,0.28)] perspective-[500px]">
               <span aria-hidden="true" className="why-feature-wave why-feature-wave-1 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />

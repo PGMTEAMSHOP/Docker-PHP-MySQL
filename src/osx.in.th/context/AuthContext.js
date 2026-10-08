@@ -20,7 +20,8 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [scripts, setScripts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [stats, setStats] = useState({ total_users: 5458, total_sold: 0 });
+  const [stats, setStats] = useState({ total_users: 0, total_sold: 0 });
+  const [statsLoaded, setStatsLoaded] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -48,6 +49,8 @@ export function AuthProvider({ children }) {
       }
     } catch (e) {
       console.warn('Could not load scripts:', e);
+    } finally {
+      setStatsLoaded(true);
     }
   };
 
@@ -165,6 +168,7 @@ export function AuthProvider({ children }) {
         scripts,
         categories,
         stats,
+        statsLoaded,
         isLoginOpen,
         setIsLoginOpen,
         isRegisterOpen,
