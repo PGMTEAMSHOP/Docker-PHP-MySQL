@@ -1,0 +1,22 @@
+ ["9872472334"] = "Evade.lua", -- main mode
+        ["96537472072550"] = "Evade.lua", -- legacy mode
+        ["10324346056"] = "Evade.lua", -- Big Team mode
+        ["10662542523"] = "Evade.lua", -- Casual mode
+        ["10324347967"] = "Evade.lua", -- Social mode
+        ["10808838353"] = "Evade.lua", -- Vc Olny mode
+        ["11353528705"] = "Evade.lua", --  Pro Server mode
+        ["121271605799901"] = "Evade.lua", -- NextBots mode
+
+        ["93978595733734"] = "ViolenceDistrict.lua",
+        ["70845479499574"] = "BiteByNight.lua",
+
+        ["2916899287"] = "BMR5.lua", -- Main Menu
+        ["14014688944"] = "BMR5.lua", -- HQ Mode
+        ["3701546109"] = "BMR5.lua", -- Main Mode
+        ["4747446334"] = "BMR5.lua", -- Zombie Mode
+
+
+        ["90906407195271"] = "RacketRivals.lua", -- Main Lobby
+        ["78912788107663"] = "RacketRivals.lua", -- Ranks
+
+        ["78912788107663"] = "RacketRivals.lua", -- Ranks

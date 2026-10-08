@@ -1,0 +1,39 @@
+<div class="nav-container">
+    <a class="nav-logo" href="#" onclick="navigate('home')" style="font-family: var(--font-title); font-size: 1.4rem; letter-spacing: -0.5px; font-weight: 900;">
+        <div class="logo-icon" style="background: rgba(0, 180, 255, 0.05); border-color: rgba(0, 180, 255, 0.2);">
+            <i class="fa-solid fa-heart" style="color: var(--blue); font-size: 14px;"></i>
+        </div>
+        <span>OSX <span style="color: var(--blue);">HUB</span></span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="nav-links" id="desktopNav">
+        <a class="nav-link active" onclick="navigate('home')" data-page="home">
+            <i class="fa-solid fa-house"></i> หน้าหลัก
+        </a>
+        <a class="nav-link" onclick="navigate('topup')" data-page="topup">
+            <i class="fa-solid fa-wallet"></i> เติมเงิน
+        </a>
+        <a class="nav-link" onclick="navigate('store')" data-page="store">
+            <i class="fa-solid fa-store"></i> ร้านค้า
+        </a>
+        <a class="nav-link" onclick="navigate('profile')" data-page="profile">
+            <i class="fa-solid fa-user"></i> โปรไฟล์
+        </a>
+    </div>
+
+    <!-- Balance + Login -->
+    <div class="nav-right">
+        <div class="nav-balance" id="navBalance">
+            <i class="fa-solid fa-coins"></i>
+            <span id="navBalanceAmt">฿ 250.00</span>
+        </div>
+        <button class="btn-login" id="btnNavLogin">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>เข้าสู่ระบบ</span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="เมนู">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+# Dependencies and generated build output
+node_modules/
+.next/
+out/
+build/
+coverage/
+.vercel/
+.turbo/
+next-env.d.ts
+*.tsbuildinfo
+
+# Local secrets and environment overrides. Keep example templates versioned.
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs, caches, and editor/OS files
+logs/
+proxy_cache_dir/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local bot database and user-uploaded payment slips
+/bot-KeyScript/database.sqlite*
+/public/uploads/slips/*
+!/public/uploads/slips/.gitkeep

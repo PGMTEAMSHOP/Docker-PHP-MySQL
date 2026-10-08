@@ -4,20 +4,27 @@ services:
     build: .
     image: php_apache
     container_name: php_apache
+    environment:
+      DB_HOST: mysql
+      DB_PORT: '3306'
+      DB_NAME: osxhub_db
+      DB_USER: root
+      DB_PASS: root
+      DB_AUTO_MIGRATE: 'false'
     volumes:
       - ./src:/var/www/html
     ports:
       - "8000:80"
-    
-  db:
+
+  mysql:
     image: mysql:latest
     container_name: mysql
     restart: always
     volumes:
-      - db_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: my_project_db
+      MYSQL_DATABASE: my_project_mysql
     ports:
       - "3306:3306"
 
@@ -28,11 +35,11 @@ services:
     ports:
       - "8080:80"
     environment:
-      PMA_HOST: db
+      PMA_HOST: mysql
       PMA_USER: root
       PMA_PASSWORD: root
     depends_on:
-      - db
+      - mysql
 
 volumes:
-  db_data:
+  mysql_data:

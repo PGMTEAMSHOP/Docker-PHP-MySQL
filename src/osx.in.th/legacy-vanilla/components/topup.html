@@ -1,0 +1,99 @@
+<div class="page-header">
+    <h1>เติมเงิน</h1>
+    <p>เลือกจำนวนเงินที่ต้องการเติมและวิธีการชำระเงิน</p>
+</div>
+
+<div class="topup-layout">
+    <!-- Step 1: Amount -->
+    <div class="topup-card">
+        <div class="topup-step-label">
+            <span class="step-num">1</span> เลือกจำนวนเงิน
+        </div>
+        <div class="topup-amounts" id="topupAmounts">
+            <button class="amount-btn" data-amount="50">฿ 50</button>
+            <button class="amount-btn" data-amount="100">฿ 100</button>
+            <button class="amount-btn active" data-amount="200">฿ 200 <span class="bonus-tag">+20฿</span></button>
+            <button class="amount-btn" data-amount="300">฿ 300</button>
+            <button class="amount-btn" data-amount="500">฿ 500 <span class="bonus-tag">+75฿</span></button>
+            <button class="amount-btn" data-amount="1000">฿ 1,000 <span class="bonus-tag">+200฿</span></button>
+        </div>
+        <div class="topup-custom">
+            <label>หรือกรอกจำนวนเอง</label>
+            <div class="input-row">
+                <span class="input-prefix">฿</span>
+                <input type="number" id="customAmount" placeholder="ขั้นต่ำ 30 บาท" min="30" max="9999">
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 2: Method -->
+    <div class="topup-card">
+        <div class="topup-step-label">
+            <span class="step-num">2</span> วิธีชำระเงิน
+        </div>
+        <div class="payment-methods">
+            <label class="payment-opt active" id="payPromptpay">
+                <input type="radio" name="payment" value="promptpay" checked>
+                <div class="pay-opt-inner">
+                    <div class="pay-icon promptpay-icon">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </div>
+                    <div>
+                        <strong>PromptPay</strong>
+                        <small>สแกน QR โอนเงินทันที</small>
+                    </div>
+                </div>
+            </label>
+            <label class="payment-opt" id="payTruemoney">
+                <input type="radio" name="payment" value="truemoney">
+                <div class="pay-opt-inner">
+                    <div class="pay-icon truemoney-icon">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </div>
+                    <div>
+                        <strong>TrueMoney Wallet</strong>
+                        <small>ส่งลิงก์ผ่าน TrueMoney</small>
+                    </div>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <!-- Step 3: QR / Confirm -->
+    <div class="topup-card topup-summary-card">
+        <div class="topup-step-label">
+            <span class="step-num">3</span> ยืนยันและชำระเงิน
+        </div>
+        <div class="topup-summary">
+            <div class="summary-row">
+                <span>ยอดเงินที่เติม</span>
+                <strong id="summaryAmount" class="text-blue">฿ 200.00</strong>
+            </div>
+            <div class="summary-row">
+                <span>โบนัส</span>
+                <strong class="text-green" id="summaryBonus">+฿ 20.00</strong>
+            </div>
+            <div class="summary-row total-row">
+                <span>ได้รับทั้งหมด</span>
+                <strong id="summaryTotal" class="text-blue">฿ 220.00</strong>
+            </div>
+        </div>
+        <div class="qr-block">
+            <div class="qr-code" id="qrPlaceholder">
+                <div class="qr-mock">
+                    <!-- QR Pattern Mock -->
+                    <div class="qr-corner tl"></div>
+                    <div class="qr-corner tr"></div>
+                    <div class="qr-corner bl"></div>
+                    <div class="qr-dots"></div>
+                    <div class="qr-logo"><i class="fa-solid fa-qrcode"></i></div>
+                </div>
+            </div>
+            <p class="qr-hint">พร้อมเพย์: <b>098-XXX-XXXX</b></p>
+            <p class="qr-hint-sm">สแกน QR แล้วส่งหลักฐานให้แอดมิน</p>
+        </div>
+        <button class="btn-primary w-full" id="btnTopupConfirm">
+            <i class="fa-solid fa-paper-plane"></i> ส่งหลักฐานการโอน
+        </button>
+    </div>
+</div>

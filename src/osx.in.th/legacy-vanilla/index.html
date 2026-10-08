@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSX HUB — Roblox Script Store</title>
+    <meta name="description" content="ร้านขายสคริปต์ช่วยเล่น Roblox คุณภาพสูง ปลอดภัย อัปเดตต่อเนื่อง">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome & Lucide -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body>
+
+<div class="grid-overlay"></div>
+
+<!-- ============================
+     NAVBAR
+============================ -->
+<nav class="navbar" id="navbar">
+    <!-- Loaded dynamically from components/navbar.html -->
+</nav>
+
+<!-- Mobile Bottom Nav -->
+<nav class="bottom-nav" id="bottomNav">
+    <a class="bottom-nav-item active" onclick="navigate('home')" data-page="home">
+        <i class="fa-solid fa-house"></i>
+        <span>หลัก</span>
+    </a>
+    <a class="bottom-nav-item" onclick="navigate('topup')" data-page="topup">
+        <i class="fa-solid fa-wallet"></i>
+        <span>เติมเงิน</span>
+    </a>
+    <a class="bottom-nav-item" onclick="navigate('store')" data-page="store">
+        <i class="fa-solid fa-store"></i>
+        <span>ร้านค้า</span>
+    </a>
+    <a class="bottom-nav-item" onclick="navigate('profile')" data-page="profile">
+        <i class="fa-solid fa-user"></i>
+        <span>โปรไฟล์</span>
+    </a>
+</nav>
+
+<!-- ============================
+     MAIN PAGES
+============================ -->
+<main class="main">
+
+    <!-- ======== HOME PAGE ======== -->
+    <div id="page-home" class="page active">
+        <!-- Loaded dynamically from components/home.html -->
+    </div>
+
+    <!-- ======== TOPUP PAGE ======== -->
+    <div id="page-topup" class="page">
+        <!-- Loaded dynamically from components/topup.html -->
+    </div>
+
+    <!-- ======== STORE PAGE ======== -->
+    <div id="page-store" class="page">
+        <!-- Loaded dynamically from components/store.html -->
+    </div>
+
+    <!-- ======== PROFILE PAGE ======== -->
+    <div id="page-profile" class="page">
+        <!-- Loaded dynamically from components/profile.html -->
+    </div>
+
+    <!-- ======== PRODUCT DETAILS PAGE ======== -->
+    <div id="page-product" class="page">
+        <!-- Rendered dynamically by JS -->
+    </div>
+</main>
+
+<!-- ============================
+     MODALS
+============================ -->
+<div class="modal-overlay" id="buyModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeBuyModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-img" id="modalImg"></div>
+        <div class="modal-body">
+            <div class="modal-cat" id="modalCat"></div>
+            <h3 class="modal-title" id="modalTitle"></h3>
+            <p class="modal-desc" id="modalDesc"></p>
+
+            <div class="modal-features" id="modalFeatures"></div>
+
+            <div class="modal-plans" id="modalPlans"></div>
+
+            <div class="modal-balance">
+                <i class="fa-solid fa-coins"></i>
+                ยอดเงินของคุณ: <strong id="modalBalanceAmt">฿ 250.00</strong>
+            </div>
+
+            <button class="btn-primary w-full" id="btnConfirmBuy">
+                <i class="fa-solid fa-check-circle"></i> ยืนยันการซื้อ
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal modal-sm">
+        <button class="modal-close" onclick="document.getElementById('loginModal').classList.remove('show')">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="modal-body">
+            <div style="text-align:center;margin-bottom:20px;">
+                <div class="logo-icon" style="width:48px;height:48px;margin:0 auto 10px;font-size:22px;">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="#3b82f6" stroke-width="2"/>
+                        <path d="M8 12l3 3 5-5" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 style="font-size:18px;font-weight:800;">เข้าสู่ระบบ OSX HUB</h3>
+            </div>
+            <div class="settings-group">
+                <label>ชื่อผู้ใช้ / อีเมล</label>
+                <input type="text" id="loginUsername" placeholder="username หรือ email" class="input-field">
+            </div>
+            <div class="settings-group">
+                <label>รหัสผ่าน</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" class="input-field">
+            </div>
+            <button class="btn-primary w-full" onclick="doLogin()">
+                <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
+            </button>
+            <p style="text-align:center;margin-top:14px;font-size:12px;color:var(--text-muted)">
+                ยังไม่มีบัญชี? <a href="#" style="color:var(--blue)" onclick="showRegisterModal()">สมัครสมาชิก</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal-overlay" id="registerModal">
+    <div class="modal modal-sm">
+        <button class="modal-close" onclick="document.getElementById('registerModal').classList.remove('show')">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="modal-body">
+            <div style="text-align:center;margin-bottom:20px;">
+                <div class="logo-icon" style="width:48px;height:48px;margin:0 auto 10px;font-size:22px;">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="#3b82f6" stroke-width="2"/>
+                        <path d="M12 8v8M8 12h8" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 style="font-size:18px;font-weight:800;">สมัครสมาชิก OSX HUB</h3>
+            </div>
+            <div class="settings-group">
+                <label>ชื่อผู้ใช้</label>
+                <input type="text" id="regUsername" placeholder="ชื่อผู้ใช้ภาษาอังกฤษ" class="input-field">
+            </div>
+            <div class="settings-group">
+                <label>อีเมล</label>
+                <input type="email" id="regEmail" placeholder="email@example.com" class="input-field">
+            </div>
+            <div class="settings-group">
+                <label>รหัสผ่าน</label>
+                <input type="password" id="regPassword" placeholder="••••••••" class="input-field">
+            </div>
+            <button class="btn-primary w-full" onclick="doRegister()">
+                <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก
+            </button>
+            <p style="text-align:center;margin-top:14px;font-size:12px;color:var(--text-muted)">
+                มีบัญชีอยู่แล้ว? <a href="#" style="color:var(--blue)" onclick="showLoginModal()">เข้าสู่ระบบ</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer"></div>
+
+<!-- Inject dynamic loading script before app.js -->
+<script>
+    // Async loader helper to fetch component templates before DOM loading
+    async function loadComponents() {
+        try {
+            const [navbar, home, topup, store, profile] = await Promise.all([
+                fetch('components/navbar.html').then(r => r.text()),
+                fetch('components/home.html').then(r => r.text()),
+                fetch('components/topup.html').then(r => r.text()),
+                fetch('components/store.html').then(r => r.text()),
+                fetch('components/profile.html').then(r => r.text())
+            ]);
+            document.getElementById('navbar').innerHTML = navbar;
+            document.getElementById('page-home').innerHTML = home;
+            document.getElementById('page-topup').innerHTML = topup;
+            document.getElementById('page-store').innerHTML = store;
+            document.getElementById('page-profile').innerHTML = profile;
+        } catch (e) {
+            console.error('Error loading components:', e);
+        }
+    }
+</script>
+<script src="app.js"></script>
+</body>
+</html>

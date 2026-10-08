@@ -1,0 +1,37 @@
+<div id="categoryHeaderBanner" class="category-header-banner" style="display: none;"></div>
+<div class="page-header">
+    <div id="categoryBackContainer" style="display: none; margin-bottom: 1.5rem;">
+        <button class="btn-back-categories" onclick="goBackStoreLevel()">
+            <i class="fa-solid fa-arrow-left"></i> ย้อนกลับ
+        </button>
+    </div>
+    <h1 id="storeHeaderTitle">หมวดหมู่สินค้า</h1>
+    <p id="storeHeaderSub">หมวดหมู่ที่น่าสนใจจากเรา</p>
+</div>
+
+<!-- Store Category Selection View -->
+<div id="storeCategoryView" class="store-categories-container">
+    <!-- Rendered dynamically by JS -->
+</div>
+
+<!-- Scripts List View (Hidden by default) -->
+<div id="storeListView" style="display: none;">
+    <!-- Back to Category Select Button -->
+    <div style="display:flex; align-items:center; gap: 1rem; margin-bottom:1.5rem;">
+        <button class="btn-back-categories" onclick="goBackStoreLevel()" style="background:#ef4444; color:#fff; border:none; border-radius:50px; font-weight:800; padding: 0.5rem 1.2rem; cursor:pointer;">
+            <i class="fa-solid fa-arrow-left"></i> ย้อนกลับ
+        </button>
+        <h3 id="storeListTitle" style="font-family:var(--font-title); font-size:1.3rem; font-weight:900; margin: 0;">รวมบริการต่างๆ</h3>
+    </div>
+
+    <!-- Search -->
+    <div class="store-toolbar" style="margin-top: 1rem; margin-bottom: 2rem; display: flex; justify-content: flex-start;">
+        <div class="search-box" style="flex:1; max-width:400px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="ค้นหาสคริปต์...">
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid" id="storeGrid"></div>
+</div>

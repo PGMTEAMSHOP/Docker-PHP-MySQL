@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSX HUB — Admin Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Admin layout overrides */
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+        .admin-sidebar {
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding: 0 8px;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            color: var(--text-sec);
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: var(--radius);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background: var(--blue-dim);
+            color: var(--blue-light);
+        }
+        .sidebar-link.active {
+            background: rgba(59,130,246,0.15);
+            color: var(--blue);
+            font-weight: 600;
+        }
+        .admin-main {
+            padding: 30px;
+            overflow-y: auto;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+        }
+        .admin-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .admin-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            position: relative;
+        }
+        .admin-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .admin-card-val {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text);
+        }
+        .admin-card-icon {
+            font-size: 20px;
+            color: var(--blue);
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+        .admin-table th, .admin-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .admin-table th {
+            background: var(--bg3);
+            color: var(--text-sec);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .admin-table td {
+            font-size: 13px;
+        }
+        .badge-status {
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .badge-pending { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.2); }
+        .badge-success { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+        .action-btn {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: var(--bg2);
+            color: var(--text-sec);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .action-btn:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+        .btn-approve {
+            background: var(--blue-dim);
+            border-color: rgba(59,130,246,0.3);
+            color: var(--blue-light);
+        }
+        .btn-approve:hover {
+            background: var(--blue);
+            color: #fff;
+        }
+        .admin-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .admin-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        @media (max-width: 900px) {
+            .admin-layout { grid-template-columns: 1fr; }
+            .admin-sidebar { display: none; }
+            .admin-grid-4 { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <div class="logo-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="#3b82f6" stroke-width="2"/>
+                    <path d="M8 12l3 3 5-5" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span>OSX HUB <b style="color: var(--blue)">Admin</b></span>
+        </div>
+        <a class="sidebar-link active" onclick="switchAdminTab('overview')"><i class="fa-solid fa-chart-line"></i> ภาพรวมระบบ</a>
+        <a class="sidebar-link" onclick="switchAdminTab('categories')"><i class="fa-solid fa-folder-open"></i> จัดการหมวดหมู่</a>
+        <a class="sidebar-link" onclick="switchAdminTab('scripts')"><i class="fa-solid fa-code"></i> จัดการสคริปต์</a>
+        <a class="sidebar-link" onclick="switchAdminTab('topup')"><i class="fa-solid fa-wallet"></i> อนุมัติการเติมเงิน</a>
+        <a class="sidebar-link" onclick="switchAdminTab('keys')"><i class="fa-solid fa-key"></i> ตัวสร้างคีย์ (Gen Key)</a>
+        <a class="sidebar-link" href="index.html" style="margin-top: auto; border-top: 1px solid var(--border); padding-top: 16px;"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าร้าน</a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Header -->
+        <header class="admin-header">
+            <div>
+                <h1 style="font-size: 22px; font-weight: 800;" id="admin-page-title">ระบบภาพรวมหลังบ้าน</h1>
+                <p style="font-size: 12px; color: var(--text-sec);">ยินดีต้อนรับผู้ดูแลระบบ OSX HUB</p>
+            </div>
+            <div class="nav-balance">
+                <i class="fa-solid fa-user-shield"></i> <span>Admin Active</span>
+            </div>
+        </header>
+
+        <!-- =======================
+             TAB: OVERVIEW
+        ======================= -->
+        <div id="admin-overview" class="admin-tab-content">
+            <div class="admin-grid-4">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <span>ยอดขายทั้งหมด (เดือนนี้)</span>
+                        <div class="admin-card-icon"><i class="fa-solid fa-coins"></i></div>
+                    </div>
+                    <div class="admin-card-val">฿ 24,850</div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <span>สคริปต์ในร้าน</span>
+                        <div class="admin-card-icon"><i class="fa-solid fa-code"></i></div>
+                    </div>
+                    <div class="admin-card-val">8 รายการ</div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <span>รายการค้างอนุมัติ</span>
+                        <div class="admin-card-icon" style="color: var(--yellow)"><i class="fa-solid fa-clock"></i></div>
+                    </div>
+                    <div class="admin-card-val" style="color: var(--yellow)" id="pending-count-badge">2 รายการ</div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <span>สมาชิกทั้งหมด</span>
+                        <div class="admin-card-icon"><i class="fa-solid fa-users"></i></div>
+                    </div>
+                    <div class="admin-card-val">1,284 คน</div>
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="admin-section">
+                <h2 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;"><i class="fa-solid fa-history"></i> รายการสั่งซื้อล่าสุด</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ผู้ใช้</th>
+                            <th>สคริปต์</th>
+                            <th>ราคา</th>
+                            <th>เวลา</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-orders-table">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- =======================
+             TAB: MANAGE CATEGORIES
+        ======================= -->
+        <div id="admin-categories" class="admin-tab-content" style="display: none;">
+            <div class="admin-section">
+                <h2 style="font-size: 15px; font-weight: 700; margin-bottom: 16px;"><i class="fa-solid fa-folder-plus"></i> เพิ่มหมวดหมู่สินค้าใหม่</h2>
+                <div class="admin-form-grid">
+                    <div class="settings-group">
+                        <label>ชื่อหมวดหมู่</label>
+                        <input type="text" id="cat-name" placeholder="เช่น FiveM หรือ Reshade ภาพสวย" class="input-field">
+                    </div>
+                    <div class="settings-group">
+                        <label>หมวดหมู่หลัก (เว้นว่างไว้หากต้องการให้เป็นหมวดหมู่หลัก Root)</label>
+                        <select id="cat-parent-select" class="input-field" style="background: var(--card)">
+                            <option value="">-- เป็นหมวดหมู่หลัก (Root) --</option>
+                            <!-- Filled dynamically -->
+                        </select>
+                    </div>
+                    <div class="settings-group" style="grid-column: 1 / -1;">
+                        <label>ลิงก์รูปภาพแบนเนอร์ (Banner Image URL)</label>
+                        <input type="text" id="cat-image-url" placeholder="https://images.unsplash.com/..." class="input-field">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="addNewCategory()"><i class="fa-solid fa-save"></i> บันทึกหมวดหมู่</button>
+            </div>
+
+            <!-- Current Categories Table -->
+            <div class="admin-section">
+                <h2 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;"><i class="fa-solid fa-folder-tree"></i> หมวดหมู่ทั้งหมดในระบบ</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ชื่อหมวดหมู่</th>
+                            <th>ระดับหมวดหมู่</th>
+                            <th>รูปแบนเนอร์</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="current-categories-table">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- =======================
+             TAB: MANAGE SCRIPTS
+        ======================= -->
+        <div id="admin-scripts" class="admin-tab-content" style="display: none;">
+            <div class="admin-section">
+                <h2 style="font-size: 15px; font-weight: 700; margin-bottom: 16px;"><i class="fa-solid fa-plus-circle"></i> เพิ่มสินค้าสคริปต์ใหม่</h2>
+                <div class="admin-form-grid">
+                    <div class="settings-group">
+                        <label>ชื่อสินค้า</label>
+                        <input type="text" id="script-name" placeholder="เช่น ReshadeV2 หรือ Blox Fruits VIP" class="input-field">
+                    </div>
+                    <div class="settings-group">
+                        <label>เลือกหมวดหมู่ย่อย (ที่ไม่มีหมวดหมู่ย่อยซ้อนอีก)</label>
+                        <select id="script-cat-select" class="input-field" style="background: var(--card)">
+                            <!-- Filled dynamically -->
+                        </select>
+                    </div>
+                    <div class="settings-group">
+                        <label>ราคาเริ่มต้น (บาท) (ใส่ 0 หากแจกฟรี)</label>
+                        <input type="number" id="script-price" placeholder="เช่น 29" class="input-field">
+                    </div>
+                    <div class="settings-group" style="grid-column: 1 / -1;">
+                        <label>ลิงก์รูปภาพตัวอย่างสคริปต์ (Image Banner URL)</label>
+                        <input type="text" id="script-image-url" placeholder="https://images.unsplash.com/..." class="input-field">
+                    </div>
+                    <div class="settings-group" style="grid-column: 1 / -1;">
+                        <label>ลิงก์วีดีโอรีวิว YouTube (YouTube Video URL)</label>
+                        <input type="text" id="script-youtube-url" placeholder="เช่น https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="input-field">
+                    </div>
+                    <div class="settings-group" style="grid-column: 1 / -1;">
+                        <label>ฟีเจอร์เด่นของสคริปต์ (คั่นด้วยเครื่องหมายจุลภาค , )</label>
+                        <input type="text" id="script-features" placeholder="เช่น Auto Farm, Auto Quest, Silent Aim, ESP" class="input-field">
+                    </div>
+                    <div class="settings-group" style="grid-column: 1 / -1;">
+                        <label style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                            <span>กำหนดระยะเวลาและแผนราคาใช้งานเอง</span>
+                            <button type="button" class="action-btn" onclick="addPlanRow()" style="font-size: 11px; padding: 4px 10px; background:var(--blue-dim); color:var(--blue-light); border-color:rgba(0,180,255,0.25);">+ เพิ่มแผนราคา</button>
+                        </label>
+                        <div id="plans-repeater-container">
+                            <!-- Dynamic rows will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-group" style="margin-bottom: 16px;">
+                    <label>คำอธิบายสินค้า</label>
+                    <textarea id="script-desc" rows="3" placeholder="เขียนรายละเอียดสรรพคุณ..." class="input-field" style="resize: none;"></textarea>
+                </div>
+                <button class="btn-primary" onclick="addNewScript()"><i class="fa-solid fa-save"></i> บันทึกและวางขาย</button>
+            </div>
+
+            <!-- Current Scripts Table -->
+            <div class="admin-section">
+                <h2 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;">สคริปต์ที่กำลังวางขายอยู่</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Emoji</th>
+                            <th>ชื่อสินค้า</th>
+                            <th>หมวดหมู่</th>
+                            <th>ราคาเริ่มต้น</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="current-scripts-table">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- =======================
+             TAB: APPROVE TOPUP
+        ======================= -->
+        <div id="admin-topup" class="admin-tab-content" style="display: none;">
+            <div class="admin-section">
+                <h2 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;"><i class="fa-solid fa-wallet"></i> รายการแจ้งโอนเงินที่รอตรวจสอบ</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ผู้ใช้</th>
+                            <th>จำนวนเงิน</th>
+                            <th>ช่องทาง</th>
+                            <th>สถานะ</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pending-topups-table">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- =======================
+             TAB: KEY GENERATOR
+        ======================= -->
+        <div id="admin-keys" class="admin-tab-content" style="display: none;">
+            <div class="admin-section">
+                <h2 style="font-size: 15px; font-weight: 700; margin-bottom: 16px;"><i class="fa-solid fa-key"></i> สร้างคีย์ใหม่ด้วยตนเอง (Manual Generate)</h2>
+                <div class="admin-form-grid">
+                    <div class="settings-group">
+                        <label>เลือกสคริปต์สำหรับผูกคีย์</label>
+                        <select id="gen-key-script" class="input-field" style="background: var(--card)">
+                            <!-- Filled by JS -->
+                        </select>
+                    </div>
+                    <div class="settings-group">
+                        <label>ระยะเวลาคีย์</label>
+                        <select id="gen-key-duration" class="input-field" style="background: var(--card)">
+                            <option value="1 วัน">1 วัน</option>
+                            <option value="7 วัน">7 วัน</option>
+                            <option value="30 วัน">30 วัน</option>
+                            <option value="ถาวร">ถาวร</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="generateKey()"><i class="fa-solid fa-magic"></i> กดสร้างคีย์สุ่ม</button>
+            </div>
+
+            <!-- Newly Generated Key Info -->
+            <div class="admin-section" id="gen-result-section" style="display: none; border-color: var(--blue);">
+                <h2 style="font-size: 14px; font-weight: 700; color: var(--blue-light); margin-bottom: 8px;">✓ คีย์ที่สร้างสำเร็จ</h2>
+                <div style="background: var(--bg2); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius); font-family: monospace; font-size: 16px; color: var(--text); display: flex; justify-content: space-between; align-items: center;">
+                    <span id="generated-key-code">OSX-XXXX-XXXX-XXXX</span>
+                    <button class="action-btn" onclick="copyGeneratedKey()"><i class="fa-solid fa-copy"></i> คัดลอกคีย์</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer"></div>
+
+<script>
+    let pendingTopups = [];
+    let adminScriptsList = [];
+    let adminCategoriesList = [];
+    let recentOrders = [];
+
+    // Verify admin access
+    async function checkAdminAuth() {
+        try {
+            const res = await fetch('api/auth.php?action=status');
+            const data = await res.json();
+            if (data.status !== 'success' || data.data.role !== 'admin') {
+                window.location.href = 'index.html';
+            } else {
+                // Initialize admin sections
+                await reloadAdminData();
+            }
+        } catch (e) {
+            window.location.href = 'index.html';
+        }
+    }
+
+    async function reloadAdminData() {
+        await loadStats();
+        await loadPendingTopups();
+        await loadAdminCategories();
+        await loadScriptsList();
+    }
+
+    // Fetch dashboard overview stats
+    async function loadStats() {
+        try {
+            const res = await fetch('api/admin.php?action=stats').then(r => r.json());
+            if (res.status === 'success') {
+                const d = res.data;
+                // Bind counts
+                document.querySelector('.admin-grid-4 .admin-card:nth-child(1) .admin-card-val').textContent = `฿ ${parseFloat(d.total_sales).toLocaleString('th-TH')}`;
+                document.querySelector('.admin-grid-4 .admin-card:nth-child(2) .admin-card-val').textContent = `${d.total_scripts} รายการ`;
+                document.querySelector('.admin-grid-4 .admin-card:nth-child(3) .admin-card-val').textContent = `${d.total_pending} รายการ`;
+                document.querySelector('.admin-grid-4 .admin-card:nth-child(4) .admin-card-val').textContent = `${d.total_users} คน`;
+                
+                recentOrders = d.recent_orders;
+                renderRecentOrders();
+            }
+        } catch (e) {
+            console.error('Error fetching admin stats:', e);
+        }
+    }
+
+    // Fetch categories
+    async function loadAdminCategories() {
+        try {
+            const res = await fetch('api/admin.php?action=categories').then(r => r.json());
+            if (res.status === 'success') {
+                adminCategoriesList = res.data;
+                renderCurrentCategories();
+                populateCategorySelectors();
+            }
+        } catch (e) {
+            console.error('Error fetching categories:', e);
+        }
+    }
+
+    // Fetch scripts
+    async function loadScriptsList() {
+        try {
+            const res = await fetch('api/scripts.php?action=list').then(r => r.json());
+            if (res.status === 'success') {
+                adminScriptsList = res.data.scripts;
+                renderCurrentScripts();
+            }
+        } catch (e) {
+            console.error('Error fetching scripts:', e);
+        }
+    }
+
+    // Fetch pending transactions
+    async function loadPendingTopups() {
+        try {
+            const res = await fetch('api/admin.php?action=pending_topups').then(r => r.json());
+            if (res.status === 'success') {
+                pendingTopups = res.data;
+                renderPendingTopups();
+            }
+        } catch (e) {
+            console.error('Error fetching pending transactions:', e);
+        }
+    }
+
+    // Page Navigation
+    function switchAdminTab(tabName) {
+        document.querySelectorAll('.admin-tab-content').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+
+        const targetEl = document.getElementById('admin-' + tabName);
+        if (targetEl) targetEl.style.display = 'block';
+        if (event && event.currentTarget) event.currentTarget.classList.add('active');
+
+        // Update Title
+        const titleMap = {
+            overview: 'ระบบภาพรวมหลังบ้าน',
+            categories: 'ระบบจัดการหมวดหมู่สินค้า',
+            scripts: 'ระบบจัดการสินค้าและสคริปต์',
+            topup: 'ระบบตรวจสอบและอนุมัติยอดโอนเงิน',
+            keys: 'ระบบสร้างคีย์สคริปต์คงคลัง'
+        };
+        const titleEl = document.getElementById('admin-page-title');
+        if (titleEl) titleEl.textContent = titleMap[tabName] || 'หลังบ้านแอดมิน';
+    }
+
+    // Render Recent Orders
+    function renderRecentOrders() {
+        const tbody = document.getElementById('recent-orders-table');
+        if (!tbody) return;
+        tbody.innerHTML = recentOrders.map(o => `
+            <tr>
+                <td><i class="fa-solid fa-user text-blue-light mr-2"></i> ${o.user}</td>
+                <td>${o.script}</td>
+                <td style="color: var(--blue-light); font-weight: 700;">฿ ${o.price}</td>
+                <td style="color: var(--text-muted);">${o.time}</td>
+            </tr>
+        `).join('');
+    }
+
+    // Render Categories
+    function renderCurrentCategories() {
+        const tbody = document.getElementById('current-categories-table');
+        if (!tbody) return;
+
+        tbody.innerHTML = adminCategoriesList.map(c => {
+            const parent = adminCategoriesList.find(p => p.id == c.parent_id);
+            const levelLabel = parent ? `หมวดหมู่ย่อยของ: <b>${parent.name}</b>` : '<span style="color:var(--green)">หมวดหมู่หลัก (Root)</span>';
+            const imgPreview = c.image_url ? `<img src="${c.image_url}" style="height:35px; border-radius:6px;" alt="">` : 'ไม่มี';
+            return `
+                <tr>
+                    <td>${c.id}</td>
+                    <td style="font-weight:700;">${c.name}</td>
+                    <td>${levelLabel}</td>
+                    <td>${imgPreview}</td>
+                    <td>
+                        <button class="action-btn" style="color: var(--red); border-color: rgba(239,68,68,0.2);" onclick="deleteCategory(${c.id})">ลบ</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    function populateCategorySelectors() {
+        // Parent Category dropdown (Only roots can be parents)
+        const parentSelect = document.getElementById('cat-parent-select');
+        if (parentSelect) {
+            const roots = adminCategoriesList.filter(c => !c.parent_id);
+            parentSelect.innerHTML = `<option value="">-- เป็นหมวดหมู่หลัก (Root) --</option>` + roots.map(r => `
+                <option value="${r.id}">${r.name}</option>
+            `).join('');
+        }
+
+        // Script Category dropdown (Subcategories or leaf nodes preferred)
+        const scriptCatSelect = document.getElementById('script-cat-select');
+        if (scriptCatSelect) {
+            scriptCatSelect.innerHTML = adminCategoriesList.map(c => {
+                const parent = adminCategoriesList.find(p => p.id == c.parent_id);
+                const prefix = parent ? `${parent.name} > ` : '';
+                return `<option value="${c.id}">${prefix}${c.name}</option>`;
+            }).join('');
+        }
+    }
+
+    // Add New Category
+    async function addNewCategory() {
+        const name = document.getElementById('cat-name').value;
+        const imageUrl = document.getElementById('cat-image-url').value;
+        const parentId = document.getElementById('cat-parent-select').value;
+
+        if (!name || !imageUrl) {
+            showAdminToast('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch('api/admin.php?action=add_category', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    name,
+                    image_url: imageUrl,
+                    parent_id: parentId
+                })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                showAdminToast('เพิ่มหมวดหมู่สำเร็จ!', 'success');
+                document.getElementById('cat-name').value = '';
+                document.getElementById('cat-image-url').value = '';
+                await reloadAdminData();
+            } else {
+                showAdminToast(res.message, 'error');
+            }
+        } catch (e) {
+            showAdminToast('เกิดข้อผิดพลาด', 'error');
+        }
+    }
+
+    // Delete Category
+    async function deleteCategory(id) {
+        if (!confirm('ยืนยันที่จะลบหมวดหมู่นี้? สินค้าและหมวดหมู่ย่อยด้านในจะถูกลบทั้งหมด!')) return;
+        try {
+            const response = await fetch('api/admin.php?action=delete_category', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ id })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                showAdminToast(res.message, 'info');
+                await reloadAdminData();
+            }
+        } catch (e) {
+            showAdminToast('เกิดข้อผิดพลาด', 'error');
+        }
+    }
+
+    // Render Current Scripts
+    function renderCurrentScripts() {
+        const tbody = document.getElementById('current-scripts-table');
+        if (!tbody) return;
+        tbody.innerHTML = adminScriptsList.map(s => {
+            const cat = adminCategoriesList.find(c => c.id == s.category_id);
+            const catName = cat ? cat.name : 'ไม่มี';
+            return `
+                <tr>
+                    <td style="font-size: 20px;">${s.emoji}</td>
+                    <td style="font-weight: 700;">${s.name}</td>
+                    <td><span class="badge badge-cat">${catName}</span></td>
+                    <td style="color: var(--blue); font-weight: 700;">฿ ${s.price}</td>
+                    <td>
+                        <button class="action-btn" style="color: var(--red); border-color: rgba(239,68,68,0.2);" onclick="deleteScript(${s.id})">ลบ</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        // Gen Key dropdown also
+        const dropdown = document.getElementById('gen-key-script');
+        if (dropdown) {
+            dropdown.innerHTML = adminScriptsList.map(s => `
+                <option value="${s.name}">${s.emoji} ${s.name}</option>
+            `).join('');
+        }
+    }
+
+    // Plans Repeater Row Generator
+    function addPlanRow(name = '', price = '') {
+        const container = document.getElementById('plans-repeater-container');
+        if (!container) return;
+
+        const row = document.createElement('div');
+        row.className = 'plan-repeater-row';
+        row.style.display = 'flex';
+        row.style.gap = '8px';
+        row.style.marginBottom = '8px';
+
+        row.innerHTML = `
+            <input type="text" class="plan-name-input input-field" placeholder="ระยะเวลา เช่น 7 วัน" value="${name}" style="flex: 2;">
+            <input type="number" class="plan-price-input input-field" placeholder="ราคา (บาท)" value="${price}" style="flex: 1;">
+            <button type="button" class="action-btn" onclick="this.parentElement.remove()" style="color: var(--red); border-color: rgba(239,68,68,0.2); padding: 0 16px;">ลบ</button>
+        `;
+        container.appendChild(row);
+    }
+    window.addPlanRow = addPlanRow;
+
+    // Add default plans on load
+    setTimeout(() => {
+        addPlanRow('1 วัน', '');
+        addPlanRow('7 วัน', '');
+        addPlanRow('30 วัน', '');
+    }, 100);
+
+    // Add New Script
+    async function addNewScript() {
+        const name = document.getElementById('script-name').value;
+        const categoryId = document.getElementById('script-cat-select').value;
+        const price = document.getElementById('script-price').value;
+        const imageUrl = document.getElementById('script-image-url').value;
+        const desc = document.getElementById('script-desc').value;
+        const youtubeUrl = document.getElementById('script-youtube-url').value;
+        const features = document.getElementById('script-features').value;
+
+        // Gather plans from repeater
+        const planRows = document.querySelectorAll('.plan-repeater-row');
+        const plansList = [];
+        planRows.forEach(row => {
+            const pName = row.querySelector('.plan-name-input').value.trim();
+            const pPrice = parseFloat(row.querySelector('.plan-price-input').value);
+            if (pName && !isNaN(pPrice)) {
+                plansList.push({ name: pName, price: pPrice });
+            }
+        });
+        const plans = plansList.length > 0 ? JSON.stringify(plansList) : '';
+
+        if (!name || price === '' || !categoryId) {
+            showAdminToast('กรุณากรอกข้อมูลหลักให้ครบถ้วน', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch('api/admin.php?action=add_script', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    name,
+                    category_id: parseInt(categoryId),
+                    price: parseFloat(price),
+                    emoji: '🍇', // default emoji value
+                    image_url: imageUrl,
+                    description: desc,
+                    youtube_url: youtubeUrl,
+                    features,
+                    plans
+                })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                showAdminToast('เพิ่มสคริปต์สินค้าใหม่สำเร็จ!', 'success');
+                // Clear Inputs
+                document.getElementById('script-name').value = '';
+                document.getElementById('script-price').value = '';
+                document.getElementById('script-image-url').value = '';
+                document.getElementById('script-desc').value = '';
+                document.getElementById('script-youtube-url').value = '';
+                document.getElementById('script-features').value = '';
+                
+                // Clear and reset plans repeater
+                document.getElementById('plans-repeater-container').innerHTML = '';
+                addPlanRow('1 วัน', '');
+                addPlanRow('7 วัน', '');
+                addPlanRow('30 วัน', '');
+                
+                await reloadAdminData();
+            } else {
+                showAdminToast(res.message, 'error');
+            }
+        } catch (e) {
+            showAdminToast('เกิดข้อผิดพลาดในการบันทึกข้อมูล', 'error');
+        }
+    }
+
+    // Delete Script
+    async function deleteScript(id) {
+        if (!confirm('ยืนยันที่จะลบสคริปต์นี้ออกใช่หรือไม่?')) return;
+        try {
+            const response = await fetch('api/admin.php?action=delete_script', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ id })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                showAdminToast('ลบรายการสคริปต์แล้ว', 'info');
+                await reloadAdminData();
+            }
+        } catch (e) {
+            showAdminToast('เกิดข้อผิดพลาดในการลบสคริปต์', 'error');
+        }
+    }
+
+    // Render Pending Topups
+    function renderPendingTopups() {
+        const tbody = document.getElementById('pending-topups-table');
+        if (!tbody) return;
+        const badge = document.getElementById('pending-count-badge');
+        if (badge) badge.textContent = pendingTopups.length + ' รายการ';
+
+        if (pendingTopups.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">ไม่มีรายการรอดำเนินการ</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = pendingTopups.map(t => `
+            <tr id="topup-row-${t.id}">
+                <td>${t.user}</td>
+                <td style="font-weight:700;color:var(--green)">฿ ${t.amount}</td>
+                <td>${t.method}</td>
+                <td><span class="badge-status badge-pending">รอตรวจสอบ</span></td>
+                <td>
+                    <button class="action-btn btn-approve" onclick="approveTopup(${t.id}, ${t.amount})">อนุมัติเงิน</button>
+                    <button class="action-btn" style="color:var(--red);" onclick="rejectTopup(${t.id})">ปฏิเสธ</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // Approve Topup
+    async function approveTopup(id, amount) {
+        try {
+            const response = await fetch('api/admin.php?action=approve_topup', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ id })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                showAdminToast(res.message, 'success');
+                await reloadAdminData();
+            } else {
+                showAdminToast(res.message, 'error');
+            }
+        } catch (e) {
+            showAdminToast('เกิดข้อผิดพลาด', 'error');
+        }
+    }
+
+    // Reject Topup
+    async function rejectTopup(id) {
+        try {
+            const response = await fetch('api/admin.php?action=reject_topup', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ id })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                showAdminToast('ปฏิเสธรายการโอนเงินแล้ว', 'info');
+                await reloadAdminData();
+            } else {
+                showAdminToast(res.message, 'error');
+            }
+        } catch (e) {
+            showAdminToast('เกิดข้อผิดพลาด', 'error');
+        }
+    }
+
+    // Generate Key
+    async function generateKey() {
+        const scriptName = document.getElementById('gen-key-script').value;
+        const duration = document.getElementById('gen-key-duration').value;
+
+        try {
+            const response = await fetch('api/admin.php?action=gen_key', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ script_name: scriptName, duration })
+            });
+            const res = await response.json();
+            if (res.status === 'success') {
+                document.getElementById('generated-key-code').textContent = res.data.key_code;
+                document.getElementById('gen-result-section').style.display = 'block';
+                showAdminToast('สุ่มสร้างคีย์ใหม่สำเร็จ!', 'success');
+            } else {
+                showAdminToast(res.message, 'error');
+            }
+        } catch (e) {
+            showAdminToast('เกิดข้อผิดพลาด', 'error');
+        }
+    }
+
+    function copyGeneratedKey() {
+        const text = document.getElementById('generated-key-code').textContent;
+        navigator.clipboard.writeText(text).catch(() => {});
+        showAdminToast('คัดลอกคีย์ลงคลิปบอร์ดแล้ว', 'info');
+    }
+
+    // Toast Notification helper for admin
+    function showAdminToast(msg, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.style.position = 'static';
+        toast.style.marginBottom = '8px';
+        const icons = { success: 'fa-check-circle', error: 'fa-circle-xmark', info: 'fa-circle-info' };
+        toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${msg}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+    }
+
+    // Init
+    checkAdminAuth();
+</script>
+</body>
+</html>

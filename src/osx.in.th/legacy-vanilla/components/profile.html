@@ -1,0 +1,93 @@
+<!-- Profile Header -->
+<div class="profile-header">
+    <div class="profile-avatar">
+        <div class="avatar-ring">
+            <div class="avatar-inner">
+                <i class="fa-solid fa-user"></i>
+            </div>
+        </div>
+        <div class="avatar-status"></div>
+    </div>
+    <div class="profile-info">
+        <h2 class="profile-name">XDNZ_Player</h2>
+        <span class="profile-badge"><i class="fa-solid fa-crown"></i> VIP Member</span>
+        <p class="profile-joined"><i class="fa-regular fa-calendar"></i> สมัครเมื่อ: 1 ม.ค. 2025</p>
+    </div>
+</div>
+
+<!-- Balance Cards -->
+<div class="profile-cards">
+    <div class="prof-card blue-card">
+        <div class="prof-card-icon"><i class="fa-solid fa-coins"></i></div>
+        <div>
+            <p>ยอดเงินคงเหลือ</p>
+            <strong id="profileBalance">฿ 250.00</strong>
+        </div>
+        <button class="prof-topup-btn" onclick="navigate('topup')">เติมเงิน</button>
+    </div>
+    <div class="prof-card dark-card">
+        <div class="prof-card-icon"><i class="fa-solid fa-box-open"></i></div>
+        <div>
+            <p>สินค้าที่ซื้อแล้ว</p>
+            <strong id="profilePurchased">3 รายการ</strong>
+        </div>
+    </div>
+    <div class="prof-card dark-card">
+        <div class="prof-card-icon"><i class="fa-solid fa-key"></i></div>
+        <div>
+            <p>คีย์ที่ใช้งานอยู่</p>
+            <strong id="profileActiveKeys">2 คีย์</strong>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs -->
+<div class="profile-tabs">
+    <button class="prof-tab active" data-tab="keys">
+        <i class="fa-solid fa-key"></i> คีย์ของฉัน
+    </button>
+    <button class="prof-tab" data-tab="history">
+        <i class="fa-solid fa-clock-rotate-left"></i> ประวัติซื้อ
+    </button>
+    <button class="prof-tab" data-tab="settings">
+        <i class="fa-solid fa-gear"></i> ตั้งค่า
+    </button>
+</div>
+
+<!-- Tab: Keys -->
+<div class="prof-tab-content active" id="tab-keys">
+    <div class="keys-list" id="keysList"></div>
+</div>
+
+<!-- Tab: History -->
+<div class="prof-tab-content" id="tab-history">
+    <div class="history-list" id="historyList"></div>
+</div>
+
+<!-- Tab: Settings -->
+<div class="prof-tab-content" id="tab-settings">
+    <div class="settings-form">
+        <div class="settings-group">
+            <label>ชื่อผู้ใช้</label>
+            <input type="text" value="XDNZ_Player" class="input-field">
+        </div>
+        <div class="settings-group">
+            <label>อีเมล</label>
+            <input type="email" value="user@osxhub.io" class="input-field">
+        </div>
+        <div class="settings-group">
+            <label>Discord ID</label>
+            <input type="text" placeholder="YourName#0000" class="input-field">
+        </div>
+        <div class="settings-group">
+            <label>รหัสผ่านใหม่</label>
+            <input type="password" placeholder="••••••••" class="input-field">
+        </div>
+        <button class="btn-primary" onclick="showToast('บันทึกการเปลี่ยนแปลงแล้ว', 'success')">
+            <i class="fa-solid fa-floppy-disk"></i> บันทึก
+        </button>
+        <button class="btn-danger" style="margin-top:12px" onclick="showToast('ออกจากระบบแล้ว', 'info')">
+            <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
+        </button>
+    </div>
+</div>
