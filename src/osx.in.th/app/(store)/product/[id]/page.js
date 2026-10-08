@@ -110,6 +110,19 @@ export default function ProductDetail({ params }) {
     setPromoCode('');
   }, [selectedPlan]);
 
+  const copyClaimCode = async (value) => {
+    if (!value) return;
+
+    try {
+      await navigator.clipboard.writeText(String(value));
+      setCopiedCode(true);
+      showToast(lang === 'th' ? 'คัดลอกเรียบร้อยแล้ว' : 'Copied to clipboard', 'success');
+      window.setTimeout(() => setCopiedCode(false), 2000);
+    } catch (error) {
+      showToast(lang === 'th' ? 'ไม่สามารถคัดลอกได้ กรุณาคัดลอกด้วยตนเอง' : 'Unable to copy. Please copy it manually.', 'error');
+    }
+  };
+
   const handleApplyDiscount = async () => {
     if (!promoCode.trim() || !selectedPlan) return;
     setValidatingCode(true);

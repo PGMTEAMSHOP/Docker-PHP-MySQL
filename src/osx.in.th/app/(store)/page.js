@@ -13,7 +13,7 @@ import {
   Package,
   Boxes,
   CheckCircle2,
-  HelpCircle,
+  Sparkles,
   ShoppingCart,
   Zap,
   ShieldCheck,
@@ -302,92 +302,6 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          3. WHY CHOOSE US (ทำไมต้องเลือก OSX HUB)
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section className="w-full gsap-section">
-        {/* Section Header */}
-        <div className="sec-head">
-          <div className="sec-ic">
-            <HelpCircle className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-lg sm:text-2xl font-black text-white leading-tight">
-              ทำไมต้องเลือก OSX HUB
-            </h2>
-            <small className="text-[10px] sm:text-xs font-bold text-[#64748b] tracking-widest uppercase block">
-              WHY CHOOSE US
-            </small>
-          </div>
-          <div className="sec-line" />
-        </div>
-
-        {/* 4 Feature Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-2 sm:mt-3 gsap-stagger-grid">
-          
-          {/* Card 1 */}
-          <div className="why-card group flex flex-col justify-between">
-            <div>
-              <div className="why-ic">
-                <ShoppingCart className="w-4 sm:w-5 h-4 sm:h-5" />
-              </div>
-              <h3 className="text-xs sm:text-base font-bold text-white group-hover:text-sky-400 transition-colors">
-                ซื้อง่าย ไม่กี่ขั้นตอน
-              </h3>
-              <p className="text-[11px] sm:text-xs text-[#94a3b8] leading-relaxed mt-1 sm:mt-2 line-clamp-3 sm:line-clamp-none">
-                ระบบหน้าเว็บใช้งานง่าย สะดวก รวดเร็ว สั่งซื้อได้ตลอด 24 ชั่วโมง พร้อมคู่มือแนะนำ
-              </p>
-            </div>
-          </div>
-
-          {/* Card 2 */}
-          <div className="why-card group flex flex-col justify-between">
-            <div>
-              <div className="why-ic">
-                <Zap className="w-4 sm:w-5 h-4 sm:h-5" />
-              </div>
-              <h3 className="text-xs sm:text-base font-bold text-white group-hover:text-sky-400 transition-colors">
-                รวดเร็ว จัดส่งทันที
-              </h3>
-              <p className="text-[11px] sm:text-xs text-[#94a3b8] leading-relaxed mt-1 sm:mt-2 line-clamp-3 sm:line-clamp-none">
-                ชำระเงินเสร็จสิ้น ระบบจัดส่งคีย์และสคริปต์ให้อัตโนมัติทันที ไม่ต้องรอแอดมินอนุมัติ
-              </p>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className="why-card group flex flex-col justify-between">
-            <div>
-              <div className="why-ic">
-                <ShieldCheck className="w-4 sm:w-5 h-4 sm:h-5" />
-              </div>
-              <h3 className="text-xs sm:text-base font-bold text-white group-hover:text-sky-400 transition-colors">
-                ปลอดภัย 100%
-              </h3>
-              <p className="text-[11px] sm:text-xs text-[#94a3b8] leading-relaxed mt-1 sm:mt-2 line-clamp-3 sm:line-clamp-none">
-                สคริปต์ผ่านการทดสอบอย่างเข้มงวด ปลอดภัย ไร้ไวรัส ป้องกันระบบตรวจจับ อัปเดตสม่ำเสมอ
-              </p>
-            </div>
-          </div>
-
-          {/* Card 4 */}
-          <div className="why-card group flex flex-col justify-between">
-            <div>
-              <div className="why-ic">
-                <Headphones className="w-4 sm:w-5 h-4 sm:h-5" />
-              </div>
-              <h3 className="text-xs sm:text-base font-bold text-white group-hover:text-sky-400 transition-colors">
-                ซัพพอร์ตตลอด 24 ชม.
-              </h3>
-              <p className="text-[11px] sm:text-xs text-[#94a3b8] leading-relaxed mt-1 sm:mt-2 line-clamp-3 sm:line-clamp-none">
-                มีทีมงานคอยช่วยเหลือ ให้คำปรึกษา และแก้ไขปัญหาตลอดเวลาผ่าน Discord ชุมชนใหญ่
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
           4. FEATURED CATEGORIES (หมวดหมู่แนะนำ)
       ═══════════════════════════════════════════════════════════════════ */}
       <section className="w-full gsap-section">
@@ -462,6 +376,88 @@ export default function Home() {
         )}
       </section>
 
+                  {/* ═══════════════════════════════════════════════════════════════════
+          3. WHY CHOOSE US (ทำไมต้องเลือก OSX HUB)
+      ═══════════════════════════════════════════════════════════════════ */}
+      <section className="w-full gsap-section">
+        <div className="sec-head">
+          <div className="sec-ic">
+            <Sparkles aria-hidden="true" className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-lg sm:text-2xl font-black text-white leading-tight">
+              ทำไมต้องเลือก OSX HUB
+            </h2>
+            <small className="text-[10px] sm:text-xs font-bold text-[#64748b] tracking-widest uppercase block">
+              WHY CHOOSE US
+            </small>
+          </div>
+          <div className="sec-line" />
+        </div>
+
+        <div className="gsap-stagger-grid mt-2 grid auto-rows-fr grid-cols-1 gap-3 sm:mt-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+          <article className="group why-feature-card flex h-full flex-col rounded-2xl border border-white/10 bg-gradient-to-br from-[#0c1722] to-[#08111a] p-4 transition duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_12px_32px_rgba(2,132,199,0.12)] sm:p-5">
+            <div className="why-feature-icon relative isolate mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-sky-400/20 bg-gradient-to-br from-sky-500 to-sky-700 text-white shadow-[0_4px_14px_rgba(2,132,199,0.28)] perspective-[500px]">
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-1 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-2 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-3 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <ShoppingCart aria-hidden="true" className="h-5 w-5" />
+            </div>
+            <h3 className="text-sm font-bold text-white transition-colors group-hover:text-sky-300 sm:text-base">
+              ซื้อง่าย ไม่กี่ขั้นตอน
+            </h3>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-[#94a3b8] sm:text-xs sm:leading-6">
+              ระบบหน้าเว็บใช้งานง่าย สะดวก รวดเร็ว สั่งซื้อได้ตลอด 24 ชั่วโมง พร้อมคู่มือแนะนำ
+            </p>
+          </article>
+
+          <article className="group why-feature-card flex h-full flex-col rounded-2xl border border-white/10 bg-gradient-to-br from-[#0c1722] to-[#08111a] p-4 transition duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_12px_32px_rgba(2,132,199,0.12)] sm:p-5">
+            <div className="why-feature-icon relative isolate mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-sky-400/20 bg-gradient-to-br from-sky-500 to-sky-700 text-white shadow-[0_4px_14px_rgba(2,132,199,0.28)] perspective-[500px]">
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-1 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-2 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-3 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <Zap aria-hidden="true" className="h-5 w-5" />
+            </div>
+            <h3 className="text-sm font-bold text-white transition-colors group-hover:text-sky-300 sm:text-base">
+              รวดเร็ว จัดส่งทันที
+            </h3>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-[#94a3b8] sm:text-xs sm:leading-6">
+              ชำระเงินเสร็จสิ้น ระบบจัดส่งคีย์และสคริปต์ให้อัตโนมัติทันที ไม่ต้องรอแอดมินอนุมัติ
+            </p>
+          </article>
+
+          <article className="group why-feature-card flex h-full flex-col rounded-2xl border border-white/10 bg-gradient-to-br from-[#0c1722] to-[#08111a] p-4 transition duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_12px_32px_rgba(2,132,199,0.12)] sm:p-5">
+            <div className="why-feature-icon relative isolate mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-sky-400/20 bg-gradient-to-br from-sky-500 to-sky-700 text-white shadow-[0_4px_14px_rgba(2,132,199,0.28)] perspective-[500px]">
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-1 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-2 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-3 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <ShieldCheck aria-hidden="true" className="h-5 w-5" />
+            </div>
+            <h3 className="text-sm font-bold text-white transition-colors group-hover:text-sky-300 sm:text-base">
+              ปลอดภัย 100%
+            </h3>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-[#94a3b8] sm:text-xs sm:leading-6">
+              สคริปต์ผ่านการทดสอบอย่างเข้มงวด ปลอดภัย ไร้ไวรัส ป้องกันระบบตรวจจับ อัปเดตสม่ำเสมอ
+            </p>
+          </article>
+
+          <article className="group why-feature-card flex h-full flex-col rounded-2xl border border-white/10 bg-gradient-to-br from-[#0c1722] to-[#08111a] p-4 transition duration-300 hover:-translate-y-1 hover:border-sky-500/40 hover:shadow-[0_12px_32px_rgba(2,132,199,0.12)] sm:p-5">
+            <div className="why-feature-icon relative isolate mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-sky-400/20 bg-gradient-to-br from-sky-500 to-sky-700 text-white shadow-[0_4px_14px_rgba(2,132,199,0.28)] perspective-[500px]">
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-1 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-2 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <span aria-hidden="true" className="why-feature-wave why-feature-wave-3 pointer-events-none absolute inset-0 rounded-xl border border-sky-200/80 opacity-0" />
+              <Headphones aria-hidden="true" className="h-5 w-5" />
+            </div>
+            <h3 className="text-sm font-bold text-white transition-colors group-hover:text-sky-300 sm:text-base">
+              ซัพพอร์ตตลอด 24 ชม.
+            </h3>
+            <p className="mt-1.5 text-[11px] leading-relaxed text-[#94a3b8] sm:text-xs sm:leading-6">
+              มีทีมงานคอยช่วยเหลือ ให้คำปรึกษา และแก้ไขปัญหาตลอดเวลาผ่าน Discord ชุมชนใหญ่
+            </p>
+          </article>
+        </div>
+      </section>
+
       {/* ═══════════════════════════════════════════════════════════════════
           5. FEATURED PRODUCTS (สินค้าแนะนำ)
       ═══════════════════════════════════════════════════════════════════ */}
@@ -508,7 +504,7 @@ export default function Home() {
                     />
                     
                     {/* Status Badge */}
-                    <div className="absolute top-2 sm:top-2.5 left-2 sm:left-2.5 z-10">
+                    {/* <div className="absolute top-2 sm:top-2.5 left-2 sm:left-2.5 z-10">
                       <span className={`text-[9px] sm:text-[10px] font-extrabold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-md ${
                         inStock
                           ? 'bg-sky-600/90 text-white border border-sky-400/50'
@@ -516,7 +512,7 @@ export default function Home() {
                       }`}>
                         {inStock ? 'พร้อมส่งทันที' : 'สินค้าหมด'}
                       </span>
-                    </div>
+                    </div> */}
                   </Link>
 
                   {/* Body Content */}

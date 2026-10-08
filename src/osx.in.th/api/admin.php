@@ -192,6 +192,7 @@ elseif ($action === 'add_script') {
     $banner_url = isset($input['banner_url']) ? trim($input['banner_url']) : '';
     $place_ids = isset($input['place_ids']) ? trim($input['place_ids']) : '';
     $platform = isset($input['platform']) ? trim($input['platform']) : 'Windows 10 & 11';
+    $type = isset($input['type']) ? trim($input['type']) : 'Script';
     $delivery_type = isset($input['delivery_type']) ? trim($input['delivery_type']) : '';
     if (empty($delivery_type) || $delivery_type === 'script_key') {
         $fileLower = strtolower($script_file);
@@ -365,6 +366,7 @@ elseif ($action === 'edit_script') {
     $banner_url = isset($input['banner_url']) ? trim($input['banner_url']) : '';
     $place_ids = isset($input['place_ids']) ? trim($input['place_ids']) : '';
     $platform = isset($input['platform']) ? trim($input['platform']) : 'Windows 10 & 11';
+    $type = isset($input['type']) ? trim($input['type']) : 'Script';
     $delivery_type = isset($input['delivery_type']) ? trim($input['delivery_type']) : '';
     if (empty($delivery_type) || $delivery_type === 'script_key') {
         $fileLower = strtolower($script_file);
@@ -995,4 +997,3 @@ elseif ($action === 'delete_announcement') {
 else {
     respond('error', 'Invalid action');
 }
-
